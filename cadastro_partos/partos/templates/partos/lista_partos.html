@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Partos</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/pt-br.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Cadastro de Partos</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Brinco</th>
+                    <th class="data-column">Data Provável</th>
+                    <th class="data-column">Data</th>
+                    <th>ECC</th>
+                    <th>Tipo</th>
+                    <th>Crias</th>
+                    <th class="manejo-column">Manejo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for parto in partos %}
+                <tr>
+                    <td>{{ parto.brinco }}</td>
+                    <td class="date">{{ parto.data_prov }}</td>
+                    <td class="date">{{ parto.data }}</td>
+                    <td>{{ parto.ecc }}</td>
+                    <td>{{ parto.get_tipo_display }}</td>
+                    <td>
+                        1: {{ parto.get_sexo_cria1_display }} - {{ parto.peso_cria1 }} kg<br>
+                        {% if parto.sexo_cria2 %}2: {{ parto.get_sexo_cria2_display }} - {{ parto.peso_cria2 }} kg<br>{% endif %}
+                        {% if parto.sexo_cria3 %}3: {{ parto.get_sexo_cria3_display }} - {{ parto.peso_cria3 }} kg<br>{% endif %}
+                        {% if parto.sexo_cria4 %}4: {{ parto.get_sexo_cria4_display }} - {{ parto.peso_cria4 }} kg<br>{% endif %}
+                    </td>
+                    <td>{{ parto.manejo }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'novo_parto' %}" class="btn-primary">Novo Parto</a>
+    </div>
+    <script>
+        $(document).ready(function() {
+            moment.locale('pt-br');
+            $('.date').each(function() {
+                var date = $(this).text();
+                $(this).text(moment(date).format('L'));
+            });
+        });
+    </script>
+</body>
+</html>
